@@ -47,7 +47,9 @@ python annotator.py data/
 
 ## Folder mode
 
-When annotating a folder, annotations are saved automatically when navigating between images. Files are written to an `annotations/` folder next to the image folder, named `<stem>_annotated.png`. Images with no annotation are not saved. If you navigate back to an already-annotated image, the existing annotation is reloaded.
+`annotate_folder(foldername, annotations_directory=None)` loads all supported images in `foldername` (extensions: `.png`, `.jpg`, `.jpeg`, `.bmp`, `.tif`, `.tiff`) in sorted order.
+
+Annotations are saved in `annotations/` folder next to the image folder, or in `annotations_directory` if provided. When you move between images (`←` / `→`) or close the window, the current annotation is saved, and will be reloaded if you return to the same image later.
 
 ## Requirements
 

@@ -594,8 +594,8 @@ class Annotator(PyQt5.QtWidgets.QWidget):
     def saveOutcome(self, show_message=True):
         '''
         Saves the annotation to saveAddress. If there is no visible annotation,
-        any existing file at saveAddress is deleted instead. Returns True if
-        a file was saved, False otherwise.
+        the existing file at saveAddress is left unchanged. Returns True if a
+        file was saved, False otherwise.
 
         Parameters
         ----------
@@ -603,15 +603,9 @@ class Annotator(PyQt5.QtWidgets.QWidget):
 
         '''
         if not self.annotationDirty and not self.hasVisibleAnnotation():
-            existing_file = Path(self.saveAddress)
-            if existing_file.exists():
-                existing_file.unlink()
             return False
 
         if not self.hasVisibleAnnotation():
-            existing_file = Path(self.saveAddress)
-            if existing_file.exists():
-                existing_file.unlink()
             self.annotationDirty = False
             return False
 
