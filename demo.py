@@ -9,4 +9,4 @@ Press 'H' in the window for help.
 from annotator import annotate_folder
 
 
-annotate_folder('data')
+annotate_folder('data', 'test')

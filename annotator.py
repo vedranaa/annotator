@@ -145,7 +145,7 @@ class Annotator(PyQt5.QtWidgets.QWidget):
         return annotator
 
     @classmethod
-    def fromFolder(cls, foldername):
+    def fromFolder(cls, foldername, annotations_directory=None):
         '''
         Initializes an Annotator in folder mode, loading the first image.
 
@@ -155,6 +155,9 @@ class Annotator(PyQt5.QtWidgets.QWidget):
         Parameters
         ----------
         foldername : path to a folder containing images.
+        annotations_directory : optional path where annotation files are saved.
+            Can be relative or absolute. If None, defaults to an
+            'annotations' directory next to foldername.
 
         '''
         folder = Path(foldername)
@@ -171,8 +174,15 @@ class Annotator(PyQt5.QtWidgets.QWidget):
 
         annotator = Annotator(first_image_pix.size())
         annotator.imageFiles = [str(path) for path in image_files]
-        annotator.annotationsDir = folder.parent / 'annotations'
-        annotator.annotationsDir.mkdir(exist_ok=True)
+        if annotations_directory is None:
+            annotations_dir = folder.parent / 'annotations'
+        else:
+            annotations_dir = Path(annotations_directory).expanduser()
+            if not annotations_dir.is_absolute():
+                annotations_dir = Path.cwd() / annotations_dir
+
+        annotator.annotationsDir = annotations_dir
+        annotator.annotationsDir.mkdir(parents=True, exist_ok=True)
         annotator.loadImageAtIndex(0, save_current=False)
         return annotator
     
@@ -681,9 +691,9 @@ def annotate_filename(filename):
     return _run_annotator(ex, created_app)
 
 
-def annotate_folder(foldername):
+def annotate_folder(foldername, annotations_directory=None):
     _, created_app = _ensure_qt_app()
-    ex = Annotator.fromFolder(foldername)
+    ex = Annotator.fromFolder(foldername, annotations_directory=annotations_directory)
     return _run_annotator(ex, created_app)
 
 
