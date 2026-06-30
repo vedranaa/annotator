@@ -7,6 +7,8 @@ Press 'H' in the window for help.
 """
 
 from annotator import annotate_folder
+from pathlib import Path
 
 
-annotate_folder('data')
+root = Path(__file__).resolve().parent
+annotate_folder(str(root / 'data'))

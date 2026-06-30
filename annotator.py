@@ -376,7 +376,13 @@ class Annotator(PyQt5.QtWidgets.QWidget):
         self.setImage(image_pix, image_path=str(image_path),
                       save_address=str(self.annotationPathForImage(image_path)))
         self.loadAnnotation()
-        self.drawCursorPoint(self.lastCursorPoint)
+        # Redraw cursor preview where the mouse currently is in widget coords.
+        cursor_point = self.mapFromGlobal(PyQt5.QtGui.QCursor.pos())
+        if self.rect().contains(cursor_point):
+            self.lastCursorPoint = cursor_point
+            self.drawCursorPoint(self.lastCursorPoint)
+        else:
+            self.cursorPix.fill(self.color_picker(label=0, opacity=0))
         self.setTitle()
         self.showInfo(f'Loaded {image_path.name} ({index + 1}/{len(self.imageFiles)})')
         self.update()
